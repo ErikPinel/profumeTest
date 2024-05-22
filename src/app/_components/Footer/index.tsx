@@ -21,7 +21,9 @@ export async function Footer() {
 
   const navItems = footer?.navItems || []
 
-  return <>
-  <FooterComponent footer={footer}/>
-  </>
+  return (
+    <>
+      <FooterComponent footer={footer} />
+    </>
+  )
 }
