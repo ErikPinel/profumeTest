@@ -45,7 +45,7 @@ export const ThemeProvider: React.FC<{ children?: React.ReactNode }> = ({ childr
       }
     }
 
-    document.documentElement.setAttribute('def', defaultTheme)
+    document.documentElement.setAttribute('data-theme', defaultTheme)
     setThemeState(defaultTheme)
   }, [])
 
