@@ -21,7 +21,7 @@ type Result = {
   page: number
   prevPage: number
   totalDocs: number
-  totalPages: number_
+  totalPages: number
 }
 
 export type Props = {
@@ -116,10 +116,10 @@ export const CollectionArchive: React.FC<Props> = props => {
           where: {
             ...(categoryFilters
               ? {
-                  categories: {
-                    in: categoryFilters,
-                  },
-                }
+                categories: {
+                  in: categoryFilters,
+                },
+              }
               : {}),
           },
         },
