@@ -255,7 +255,7 @@ export const CartProvider = props => {
       }, 0) || 0
 
     setTotal({
-      formatted: ( newTotal ).toLocaleString('he-IL', {
+      formatted: newTotal.toLocaleString('he-IL', {
         style: 'currency',
         currency: 'ILS',
       }),
