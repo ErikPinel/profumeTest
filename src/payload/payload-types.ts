@@ -14,7 +14,6 @@ export type CartItems =
   | {
       product?: (string | null) | Product;
       quantity?: number | null;
-      optionMil?: string | null
       id?: string | null;
     }[]
   | null;
@@ -563,7 +562,7 @@ export interface Header {
  */
 export interface Footer {
   id: string;
-  copyright: string;
+  copyright?: string | null;
   navItems?:
     | {
         link: {
