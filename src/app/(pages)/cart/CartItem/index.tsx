@@ -39,7 +39,7 @@ const CartItem = ({ product, title, metaImage, qty, addItemToCart }) => {
       <div className={classes.itemDetails}>
         <div className={classes.titleWrapper}>
           <h6>{title}</h6>
-          <Price product={product} button={false} />
+          <div className={classes.price}>₪{product.price.toFixed(2)}</div>
         </div>
 
         <div className={classes.quantity}>
@@ -70,7 +70,8 @@ const CartItem = ({ product, title, metaImage, qty, addItemToCart }) => {
         </div>
       </div>
       <div className={classes.subtotalWrapper}>
-        <Price product={product} button={false} quantity={quantity} />
+        {/* <Price product={product} button={false} quantity={quantity} /> */}
+        <div className={classes.price}>₪{(product.price * quantity).toFixed(2)}</div>
         <RemoveFromCartButton product={product} />
       </div>
     </li>

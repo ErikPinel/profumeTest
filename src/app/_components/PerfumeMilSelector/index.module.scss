@@ -1,0 +1,29 @@
+@import '../../_css/queries.scss';
+
+.perfumeMilSelector{
+    background-color: #ffff;
+    width: 10vh;
+    height: 4vh;
+    color: black;
+    border: 2px black solid;
+    border-radius: 30px;
+    text-align: center;
+    padding-top: 0.5vh;
+    cursor: pointer;
+    @include small-break{
+        width: 13vw;
+        font-size: 2.5vw;
+        font-weight: 600;
+    }
+
+}
+
+.pressed{
+    background-color: rgb(23, 22, 22);
+    color: #ffff;
+}
+.perfumeMilSelector:hover{
+    background-color: rgb(71, 69, 69);
+    color: #ffff;
+    border-color: green;
+}

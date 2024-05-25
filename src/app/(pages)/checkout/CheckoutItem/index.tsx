@@ -18,13 +18,13 @@ export const CheckoutItem = ({ product, title, metaImage, quantity, index }) => 
       <div className={classes.itemDetails}>
         <div className={classes.titleWrapper}>
           <h6>{title}</h6>
-          <Price product={product} button={false} />
+          <div className={classes.price}>₪{product.price.toFixed(2)}</div>
         </div>
         <p className={classes.quantity}>x{quantity}</p>
       </div>
 
       <div className={classes.subtotal}>
-        <Price product={product} button={false} quantity={quantity} />
+        <div className={classes.price}>₪{product.price.toFixed(2)}</div>
       </div>
     </li>
   )

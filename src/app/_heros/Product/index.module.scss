@@ -11,6 +11,14 @@
   }
 }
 
+.price{
+  font-weight: 600;
+  font-size: medium;
+
+
+
+}
+
 .mediaWrapper {
   position: relative;
   min-height: 400px;
@@ -27,15 +35,29 @@
   aspect-ratio: 1/1;
   max-width: 100%;
 }
-
+.milOptionsContainer{
+  margin-top: 2vh;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  @include small-break{
+    margin-top: 0.5vh;
+  }
+}
 .details {
   display: flex;
   flex-direction: column;
   margin-top: 10px;
 }
+.detailsContentRow{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
 
 .categoryWrapper {
   display: flex;
+  flex-direction: row;
   justify-content: flex-start;
   margin-bottom: 16px;
   margin-top: 8px;
@@ -43,7 +65,9 @@
 
 .category {
   font-size: 16px;
+  
 }
+
 
 .stock {
   color: var(--color-green-500);

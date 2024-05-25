@@ -8,12 +8,27 @@
   opacity: 1;
   transition: opacity 100ms linear;
   visibility: visible;
-
+  margin-top: 1vh;
   > * {
     text-decoration: none;
   }
 }
+.login span{
+  @include small-break{
+    font-size: small !important;
+    padding-top: 0 !important;
 
+  }
+}
+.login{
+  @include small-break{
+    height: 4vh !important;
+    padding-inline: 2vh !important;
+    padding-top: 0.5vh !important;
+    text-align: center ;
+
+  }
+}
 .hide {
   opacity: 0;
   visibility: hidden;

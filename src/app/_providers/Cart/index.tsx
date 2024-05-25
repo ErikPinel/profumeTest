@@ -16,16 +16,23 @@ import { CartItem, cartReducer } from './reducer'
 
 export type CartContext = {
   cart: User['cart']
-  addItemToCart: (item: CartItem) => void
+  addItemToCart: (item: CartItem, optionMil: string) => void
   deleteItemFromCart: (product: Product) => void
   cartIsEmpty: boolean | undefined
   clearCart: () => void
-  isProductInCart: (product: Product) => boolean
+  isProductInCart: (product: Product, optionMil: string) => boolean
   cartTotal: {
     formatted: string
     raw: number
   }
   hasInitializedCart: boolean
+}
+
+const mapOptionMillToincomingItem = (incomingItem, optionMil) => {
+  if ((optionMil = '2Mil')) incomingItem.price = incomingItem.product.price2Mil
+  else if ((optionMil = '5Mil')) incomingItem.price = incomingItem.product.price5Mil
+  else incomingItem.price = incomingItem.product.price10Mil
+  return incomingItem
 }
 
 const Context = createContext({} as CartContext)
@@ -75,6 +82,8 @@ export const CartProvider = props => {
         if (parsedCart?.items && parsedCart?.items?.length > 0) {
           const initialCart = await Promise.all(
             parsedCart.items.map(async ({ product, quantity }) => {
+              const milOptionStorage = product.id.split('/addMilSuffix/')[1]
+              product.id = product.id.split('/addMilSuffix/')[0]
               const res = await fetch(
                 `${process.env.NEXT_PUBLIC_SERVER_URL}/api/products/${product}`,
               )
@@ -82,6 +91,7 @@ export const CartProvider = props => {
               return {
                 product: data,
                 quantity,
+                milOptionStorage,
               }
             }),
           )
@@ -185,7 +195,9 @@ export const CartProvider = props => {
   }, [user, cart])
 
   const isProductInCart = useCallback(
-    (incomingProduct: Product): boolean => {
+    (incomingProduct: Product, optionMil: string): boolean => {
+      incomingProduct.id = incomingProduct.id + '/addMilSuffix/' + optionMil
+
       let isInCart = false
       const { items: itemsInCart } = cart || {}
       if (Array.isArray(itemsInCart) && itemsInCart.length > 0) {
@@ -203,10 +215,15 @@ export const CartProvider = props => {
   )
 
   // this method can be used to add new items AND update existing ones
-  const addItemToCart = useCallback(incomingItem => {
+  const addItemToCart = useCallback((incomingItem: CartItem, optionMil: string) => {
+    incomingItem.id = incomingItem.id + '/addMilSuffix/' + optionMil
+    const incomingItemMapped = mapOptionMillToincomingItem(incomingItem, optionMil)
     dispatchCart({
       type: 'ADD_ITEM',
-      payload: incomingItem,
+      payload: {
+        incomingItem,
+        optionMil,
+      },
     })
   }, [])
 
@@ -232,16 +249,15 @@ export const CartProvider = props => {
         return (
           acc +
           (typeof item.product === 'object'
-            ? JSON.parse(item?.product?.priceJSON || '{}')?.data?.[0]?.unit_amount *
-              (typeof item?.quantity === 'number' ? item?.quantity : 0)
+            ? item?.product?.price * (typeof item?.quantity === 'number' ? item?.quantity : 0)
             : 0)
         )
       }, 0) || 0
 
     setTotal({
-      formatted: (newTotal / 100).toLocaleString('en-US', {
+      formatted: ( newTotal ).toLocaleString('he-IL', {
         style: 'currency',
-        currency: 'USD',
+        currency: 'ILS',
       }),
       raw: newTotal,
     })

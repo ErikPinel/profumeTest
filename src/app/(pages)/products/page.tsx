@@ -35,6 +35,7 @@ const Products = async () => {
         <Filters categories={categories} />
         <Blocks blocks={page?.layout} disableTopPadding={true} />
       </Gutter>
+      
       <HR />
     </div>
   )

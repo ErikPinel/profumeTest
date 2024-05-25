@@ -15,7 +15,7 @@ type CartAction =
     }
   | {
       type: 'ADD_ITEM'
-      payload: CartItem
+      payload: { incomingItem: CartItem; optionMil: String }
     }
   | {
       type: 'DELETE_ITEM'
@@ -65,7 +65,10 @@ export const cartReducer = (cart: CartType, action: CartAction): CartType => {
 
     case 'ADD_ITEM': {
       // if the item is already in the cart, increase the quantity
-      const { payload: incomingItem } = action
+      const {
+        payload: { incomingItem: incomingItem, optionMil: optionMil },
+      } = action
+      console.log(optionMil + '!!!!')
       const productId =
         typeof incomingItem.product === 'string' ? incomingItem.product : incomingItem?.product?.id
 

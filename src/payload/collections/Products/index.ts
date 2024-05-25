@@ -17,7 +17,7 @@ const Products: CollectionConfig = {
   slug: 'products',
   admin: {
     useAsTitle: 'title',
-    defaultColumns: ['title', 'stripeProductID', '_status'],
+    defaultColumns: ['title', 'stripeProductID', '_status', 'price'],
     preview: doc => {
       return `${process.env.PAYLOAD_PUBLIC_SERVER_URL}/api/preview?url=${encodeURIComponent(
         `${process.env.PAYLOAD_PUBLIC_SERVER_URL}/products/${doc.slug}`,
@@ -43,6 +43,21 @@ const Products: CollectionConfig = {
     {
       name: 'title',
       type: 'text',
+      required: true,
+    },
+    {
+      name: 'price2Mil',
+      type: 'number',
+      required: true,
+    },
+    {
+      name: 'price5Mil',
+      type: 'number',
+      required: true,
+    },
+    {
+      name: 'price10Mil',
+      type: 'number',
       required: true,
     },
     {
