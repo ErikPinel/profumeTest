@@ -5,7 +5,7 @@ import classes from './index.module.scss'
 const PerfumeMilSelector = ({
   milOption,
   isPressed,
-  handleClick,
+  handleClick = () => '',
 }: {
   milOption: string
   isPressed: boolean

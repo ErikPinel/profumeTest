@@ -5,6 +5,7 @@ import React, { useEffect, useState } from 'react'
 import { Product } from '../../../payload/payload-types'
 
 import classes from './index.module.scss'
+import { doc } from 'prettier'
 
 export const priceFromJSON = (priceJSON: string, quantity: number = 1, raw?: boolean): string => {
   let price = ''
@@ -63,7 +64,7 @@ export const Price: React.FC<{
     <div className={classes.actions}>
       {typeof price?.actualPrice !== 'undefined' && price?.withQuantity !== '' && (
         <div className={classes.price}>
-          <p>{price?.withQuantity}</p>
+          <p>₪{product.price2Mil}</p>
         </div>
       )}
     </div>

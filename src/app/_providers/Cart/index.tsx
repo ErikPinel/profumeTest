@@ -9,6 +9,7 @@ import React, {
   useRef,
   useState,
 } from 'react'
+import util from 'util'
 
 import { Product, User } from '../../../payload/payload-types'
 import { useAuth } from '../Auth'
@@ -16,8 +17,8 @@ import { CartItem, cartReducer } from './reducer'
 
 export type CartContext = {
   cart: User['cart']
-  addItemToCart: (item: CartItem, optionMil: string) => void
-  deleteItemFromCart: (product: Product) => void
+  addItemToCart: (item: CartItem) => void
+  deleteItemFromCart: (product: Product, optionMil: string) => void
   cartIsEmpty: boolean | undefined
   clearCart: () => void
   isProductInCart: (product: Product, optionMil: string) => boolean
@@ -28,12 +29,11 @@ export type CartContext = {
   hasInitializedCart: boolean
 }
 
-const mapOptionMillToincomingItem = (incomingItem, optionMil) => {
-  if ((optionMil = '2Mil')) incomingItem.price = incomingItem.product.price2Mil
-  else if ((optionMil = '5Mil')) incomingItem.price = incomingItem.product.price5Mil
-  else incomingItem.price = incomingItem.product.price10Mil
-  return incomingItem
-}
+const priceBasedMil = ({ product, optionMil }: { product: Product; optionMil: string }) => {
+  if (optionMil == '2mil') return product.price2Mil
+  else if (optionMil == '5mil') return product.price5Mil
+  else return product.price10Mil
+} //diffrent the utills one
 
 const Context = createContext({} as CartContext)
 
@@ -81,9 +81,7 @@ export const CartProvider = props => {
 
         if (parsedCart?.items && parsedCart?.items?.length > 0) {
           const initialCart = await Promise.all(
-            parsedCart.items.map(async ({ product, quantity }) => {
-              const milOptionStorage = product.id.split('/addMilSuffix/')[1]
-              product.id = product.id.split('/addMilSuffix/')[0]
+            parsedCart.items.map(async ({ product, quantity, optionMil }) => {
               const res = await fetch(
                 `${process.env.NEXT_PUBLIC_SERVER_URL}/api/products/${product}`,
               )
@@ -91,7 +89,7 @@ export const CartProvider = props => {
               return {
                 product: data,
                 quantity,
-                milOptionStorage,
+                optionMil,
               }
             }),
           )
@@ -158,6 +156,7 @@ export const CartProvider = props => {
             // flatten relationship to product
             product: item?.product?.id,
             quantity: typeof item?.quantity === 'number' ? item?.quantity : 0,
+            optionMil: item?.optionMil,
           }
         })
         .filter(Boolean) as CartItem[],
@@ -189,23 +188,22 @@ export const CartProvider = props => {
       }
     } else {
       localStorage.setItem('cart', JSON.stringify(flattenedCart))
+      console.log(util.inspect(flattenedCart, false, null, true /* enable colors */))
     }
 
     setHasInitialized(true)
   }, [user, cart])
 
   const isProductInCart = useCallback(
-    (incomingProduct: Product, optionMil: string): boolean => {
-      incomingProduct.id = incomingProduct.id + '/addMilSuffix/' + optionMil
-
+    (incomingProduct: Product, incomingOptionMil: string): boolean => {
       let isInCart = false
       const { items: itemsInCart } = cart || {}
       if (Array.isArray(itemsInCart) && itemsInCart.length > 0) {
         isInCart = Boolean(
-          itemsInCart.find(({ product }) =>
+          itemsInCart.find(({ product, optionMil }) =>
             typeof product === 'string'
-              ? product === incomingProduct.id
-              : product?.id === incomingProduct.id,
+              ? product === incomingProduct.id && optionMil === incomingOptionMil
+              : product?.id === incomingProduct.id && optionMil === incomingOptionMil,
           ), // eslint-disable-line function-paren-newline
         )
       }
@@ -215,22 +213,18 @@ export const CartProvider = props => {
   )
 
   // this method can be used to add new items AND update existing ones
-  const addItemToCart = useCallback((incomingItem: CartItem, optionMil: string) => {
-    incomingItem.id = incomingItem.id + '/addMilSuffix/' + optionMil
-    const incomingItemMapped = mapOptionMillToincomingItem(incomingItem, optionMil)
+  const addItemToCart = useCallback((incomingItem: CartItem) => {
     dispatchCart({
       type: 'ADD_ITEM',
-      payload: {
-        incomingItem,
-        optionMil,
-      },
+      payload: { incomingItem },
     })
   }, [])
 
-  const deleteItemFromCart = useCallback((incomingProduct: Product) => {
+  const deleteItemFromCart = useCallback((incomingProduct: Product, optionMil: string) => {
+    console.log(incomingProduct, optionMil, 'deleteFromCart')
     dispatchCart({
       type: 'DELETE_ITEM',
-      payload: incomingProduct,
+      payload: { incomingProduct, optionMil },
     })
   }, [])
 
@@ -249,7 +243,7 @@ export const CartProvider = props => {
         return (
           acc +
           (typeof item.product === 'object'
-            ? item?.product?.price * (typeof item?.quantity === 'number' ? item?.quantity : 0)
+            ? priceBasedMil(item) * (typeof item?.quantity === 'number' ? item?.quantity : 0)
             : 0)
         )
       }, 0) || 0

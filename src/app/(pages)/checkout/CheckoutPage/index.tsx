@@ -108,6 +108,7 @@ export const CheckoutPage: React.FC<{
                 const {
                   quantity,
                   product,
+                  optionMil,
                   product: { title, meta },
                 } = item
 
@@ -120,6 +121,7 @@ export const CheckoutPage: React.FC<{
                     <CheckoutItem
                       product={product}
                       title={title}
+                      optionMil={optionMil}
                       metaImage={metaImage}
                       quantity={quantity}
                       index={index}

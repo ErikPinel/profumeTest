@@ -118,8 +118,21 @@ const Users: CollectionConfig = {
                 step: 1,
               },
             },
+            {
+              name: 'optionMil',
+              label: 'optionMil',
+              type: 'text',
+            },
           ],
         },
+        // {
+        //   name: 'option',
+        //   label: 'Created On',
+        //   type: 'date',
+        //   admin: {
+        //     readOnly: true,
+        //   },
+        // },
         // If you wanted to maintain a 'created on'
         // or 'last modified' date for the cart
         // you could do so here:

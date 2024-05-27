@@ -15,6 +15,14 @@
   background-color: var(--color-dark-50);
 }
 
+.priceAndMilWrapper {
+  padding-top: 1vh;
+  display: flex;
+  flex-direction: row;
+  gap: 2vw;
+}
+
+
 .media {
   position: relative;
   height: 100%;
@@ -45,6 +53,12 @@
 p {
     font-size: 16px;
     margin-top: 8px;
+  }
+}
+
+.price{
+  @include small-break{
+    padding-top: 0.9vh;
   }
 }
 

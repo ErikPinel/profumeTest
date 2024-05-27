@@ -11,6 +11,11 @@
   font-weight: 600;
   margin: 0;
 }
+.priceAndMilWrapper {
+  display: flex;
+  flex-direction: row;
+  gap: 2vw;
+}
 
 .mediaWrapper {
   position: relative;

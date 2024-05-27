@@ -20,6 +20,12 @@ const start = async (): Promise<void> => {
     secret: process.env.PAYLOAD_SECRET || '',
     express: app,
     onInit: () => {
+      payload
+        .find({
+          collection: 'users',
+          where: {},
+        })
+        .then(e => console.log(e))
       payload.logger.info(`Payload Admin URL: ${payload.getAdminURL()}`)
     },
   })

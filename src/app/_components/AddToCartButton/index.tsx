@@ -25,7 +25,7 @@ export const AddToCartButton: React.FC<{
 
   useEffect(() => {
     setIsInCart(isProductInCart(product, optionMil))
-  }, [isProductInCart, product, cart])
+  }, [isProductInCart, product, cart, optionMil])
 
   return (
     <Button
@@ -45,13 +45,11 @@ export const AddToCartButton: React.FC<{
       onClick={
         !isInCart
           ? () => {
-              addItemToCart(
-                {
-                  product,
-                  quantity,
-                },
+              addItemToCart({
+                product,
+                quantity,
                 optionMil,
-              )
+              })
 
               router.push('/cart')
             }

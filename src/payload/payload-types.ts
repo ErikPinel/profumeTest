@@ -14,6 +14,7 @@ export type CartItems =
   | {
       product?: (string | null) | Product;
       quantity?: number | null;
+      optionMil?: string | null;
       id?: string | null;
     }[]
   | null;
